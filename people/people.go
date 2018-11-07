@@ -12,7 +12,7 @@ type PhotoList struct {
 	Pages   int `xml:"pages,attr"`
 	PerPage int `xml:"perpage,attr"`
 	Total   int `xml:"total,attr"`
-	Photo   struct {
+	Photos  []struct {
 		Id       string `xml:"id,attr"`
 		Owner    string `xml:"owner,attr"`
 		Secret   string `xml:"secret,attr"`
@@ -34,8 +34,8 @@ type PhotoList struct {
 		DateTaken      string `xml:"date_taken,attr"`
 		OwnerName      string `xml:"owner_name,attr"`
 		IconServer     string `xml:"icon_server,attr"`
-		OriginalFormat string `xml:"original_format",attr`
-		LastUpdate     string `xml:"last_udpate",attr`
+		OriginalFormat string `xml:"originalformat,attr"`
+		LastUpdate     string `xml:"last_udpate,attr"`
 
 		// Geo - these attributes are provided when extras contains "geo"
 		Latitude  string `xml:"latitude,attr"`
@@ -103,7 +103,7 @@ type PhotoList struct {
 		UrlL    string `xml:"url_l,attr"`
 		HeightL int    `xml:"height_l,attr"`
 		WidthL  int    `xml:"width_l,attr"`
-	}
+	} `xml:"photo"`
 }
 
 type PhotoListResponse struct {

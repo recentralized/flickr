@@ -32,7 +32,6 @@ type EchoResponse struct {
 // This method requires authentication with 'read' permission.
 func Login(client *flickr.FlickrClient) (*LoginResponse, error) {
 	client.Init()
-	client.SetOAuthDefaults()
 	client.Args.Set("method", "flickr.test.login")
 	client.OAuthSign()
 
@@ -45,7 +44,6 @@ func Login(client *flickr.FlickrClient) (*LoginResponse, error) {
 // This method requires authentication with 'read' permission.
 func Null(client *flickr.FlickrClient) (*flickr.BasicResponse, error) {
 	client.Init()
-	client.SetOAuthDefaults()
 	client.Args.Set("method", "flickr.test.null")
 	client.OAuthSign()
 

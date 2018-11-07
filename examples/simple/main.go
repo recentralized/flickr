@@ -21,33 +21,43 @@ func main() {
 	// create an API client with credentials
 	client := flickr.NewFlickrClient(apik, apisec)
 
-	// ask user to authorize this application
+	// retrieve user credentials from env vars
+	token := os.Getenv("FLICKRGO_OAUTH_TOKEN")
+	tokenSecret := os.Getenv("FLICKRGO_OAUTH_TOKEN_SECRET")
 
-	// first, get a request token
-	tok, err := flickr.GetRequestToken(client)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(2)
+	if token != "" && tokenSecret != "" {
+		// use credentials if provided
+		client.OAuthToken = token
+		client.OAuthTokenSecret = tokenSecret
+	} else {
+		// ask user to authorize this application
+
+		// first, get a request token
+		tok, err := flickr.GetRequestToken(client)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(2)
+		}
+
+		// build the authorizatin URL
+		url, err := flickr.GetAuthorizeUrl(client, tok)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(3)
+		}
+
+		// ask user to hit the authorization url with
+		// their browser, authorize this application and coming
+		// back with the confirmation token
+		var oauthVerifier string
+		fmt.Println("Open your browser at this url:", url)
+		fmt.Print("Then, insert the code:")
+		fmt.Scanln(&oauthVerifier)
+
+		// finally, get the access token
+		accessTok, err := flickr.GetAccessToken(client, tok, oauthVerifier)
+		fmt.Println("Successfully retrieved OAuth token", accessTok.OAuthToken, accessTok.OAuthTokenSecret)
 	}
-
-	// build the authorizatin URL
-	url, err := flickr.GetAuthorizeUrl(client, tok)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(3)
-	}
-
-	// ask user to hit the authorization url with
-	// their browser, authorize this application and coming
-	// back with the confirmation token
-	var oauthVerifier string
-	fmt.Println("Open your browser at this url:", url)
-	fmt.Print("Then, insert the code:")
-	fmt.Scanln(&oauthVerifier)
-
-	// finally, get the access token
-	accessTok, err := flickr.GetAccessToken(client, tok, oauthVerifier)
-	fmt.Println("Successfully retrieved OAuth token", accessTok.OAuthToken, accessTok.OAuthTokenSecret)
 
 	// check everything works
 	resp, err := test.Login(client)

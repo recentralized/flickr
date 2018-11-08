@@ -1,7 +1,6 @@
 package people
 
 import (
-	"fmt"
 	"strconv"
 
 	"gopkg.in/masci/flickr.v2"
@@ -200,7 +199,6 @@ func GetPhotos(client *flickr.FlickrClient,
 		client.Args.Set("extras", opts.Extras)
 	}
 	client.OAuthSign()
-	fmt.Println("client", client)
 
 	response := &PhotoListResponse{}
 	err := flickr.DoGet(client, response)

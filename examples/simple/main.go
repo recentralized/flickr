@@ -33,7 +33,7 @@ func main() {
 		// ask user to authorize this application
 
 		// first, get a request token
-		tok, err := flickr.GetRequestToken(client)
+		tok, err := flickr.GetRequestToken(client, "")
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(2)

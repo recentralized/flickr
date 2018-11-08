@@ -41,7 +41,7 @@ func TestGetRequestToken(t *testing.T) {
 	// use the mocked client
 	fclient.HTTPClient = client
 
-	tok, err := GetRequestToken(fclient)
+	tok, err := GetRequestToken(fclient, "")
 	if err != nil {
 		t.Error("Unexpected error:", err)
 	}

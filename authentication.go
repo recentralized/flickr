@@ -92,11 +92,15 @@ func ParseOAuthToken(response string) (*OAuthToken, error) {
 
 // Retrieve a request token: this is the first step to get a fully functional
 // access token from Flickr
-func GetRequestToken(client *FlickrClient) (*RequestToken, error) {
+func GetRequestToken(client *FlickrClient, callbackUrl string) (*RequestToken, error) {
 	client.EndpointUrl = REQUEST_TOKEN_URL
 	client.SetOAuthDefaults()
 	client.Args.Set("oauth_consumer_key", client.ApiKey)
-	client.Args.Set("oauth_callback", "oob")
+	if callbackUrl == "" {
+		client.Args.Set("oauth_callback", "oob")
+	} else {
+		client.Args.Set("oauth_callback", callbackUrl)
+	}
 
 	// we don't have token secret at this stage, pass an empty string
 	client.Sign("")

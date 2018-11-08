@@ -54,9 +54,17 @@ func TestGetRequestToken(t *testing.T) {
 func TestGetAuthorizeUrl(t *testing.T) {
 	client := GetTestClient()
 	tok := &RequestToken{true, "token", "token_secret", ""}
-	url, err := GetAuthorizeUrl(client, tok)
+	url, err := GetAuthorizeUrl(client, tok, PERMS_DELETE)
 	Expect(t, err, nil)
 	Expect(t, url, "https://www.flickr.com/services/oauth/authorize?oauth_token=token&perms=delete")
+}
+
+func TestGetAuthorizeUrlNoPerms(t *testing.T) {
+	client := GetTestClient()
+	tok := &RequestToken{true, "token", "token_secret", ""}
+	url, err := GetAuthorizeUrl(client, tok, "")
+	Expect(t, err, nil)
+	Expect(t, url, "https://www.flickr.com/services/oauth/authorize?oauth_token=token")
 }
 
 func TestParseOAuthToken(t *testing.T) {

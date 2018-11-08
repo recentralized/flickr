@@ -9,6 +9,12 @@ import (
 	flickErr "gopkg.in/masci/flickr.v2/error"
 )
 
+const (
+	PERMS_READ   = "read"
+	PERMS_WRITE  = "write"
+	PERMS_DELETE = "delete"
+)
+
 // Type representing a request token during the exchange process
 type RequestToken struct {
 	// Whether the callback url matches the one provided in Flickr dashboard
@@ -110,12 +116,13 @@ func GetRequestToken(client *FlickrClient) (*RequestToken, error) {
 }
 
 // Returns the URL users need to reach to grant permission to our application
-func GetAuthorizeUrl(client *FlickrClient, reqToken *RequestToken) (string, error) {
+func GetAuthorizeUrl(client *FlickrClient, reqToken *RequestToken, perms string) (string, error) {
 	client.EndpointUrl = AUTHORIZE_URL
 	client.Args = url.Values{}
 	client.Args.Set("oauth_token", reqToken.OauthToken)
-	// TODO make permission value parametric
-	client.Args.Set("perms", "delete")
+	if perms != "" {
+		client.Args.Set("perms", perms)
+	}
 
 	return client.GetUrl(), nil
 }

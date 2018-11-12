@@ -28,8 +28,8 @@ type CheckTokenResponse struct {
 // Returns the credentials attached to an OAuth authentication token.
 // This method does not require user authentication, but the request must be api-signed.
 func CheckToken(client *flickr.FlickrClient, oauthToken string) (*CheckTokenResponse, error) {
+	client.Init()
 	client.EndpointUrl = flickr.API_ENDPOINT
-	client.ClearArgs()
 	client.Args.Set("method", "flickr.auth.oauth.checkToken")
 	client.Args.Set("oauth_token", oauthToken)
 	client.ApiSign()

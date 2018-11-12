@@ -55,6 +55,7 @@ func Null(client *flickr.FlickrClient) (*flickr.BasicResponse, error) {
 // A testing method which echo's all parameters back in the response.
 // This method does not require authentication.
 func Echo(client *flickr.FlickrClient) (*EchoResponse, error) {
+	client.Init()
 	client.EndpointUrl = flickr.API_ENDPOINT
 	client.Args.Set("method", "flickr.test.echo")
 	client.Args.Set("oauth_consumer_key", client.ApiKey)

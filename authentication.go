@@ -93,6 +93,7 @@ func ParseOAuthToken(response string) (*OAuthToken, error) {
 // Retrieve a request token: this is the first step to get a fully functional
 // access token from Flickr
 func GetRequestToken(client *FlickrClient, callbackUrl string) (*RequestToken, error) {
+	client.Init()
 	client.EndpointUrl = REQUEST_TOKEN_URL
 	client.SetOAuthDefaults()
 	client.Args.Set("oauth_consumer_key", client.ApiKey)
@@ -121,6 +122,7 @@ func GetRequestToken(client *FlickrClient, callbackUrl string) (*RequestToken, e
 
 // Returns the URL users need to reach to grant permission to our application
 func GetAuthorizeUrl(client *FlickrClient, reqToken *RequestToken, perms string) (string, error) {
+	client.Init()
 	client.EndpointUrl = AUTHORIZE_URL
 	client.Args = url.Values{}
 	client.Args.Set("oauth_token", reqToken.OauthToken)
@@ -134,6 +136,7 @@ func GetAuthorizeUrl(client *FlickrClient, reqToken *RequestToken, perms string)
 // Get an access token providing an OAuth verifier provided by Flickr once the user
 // authorizes your application
 func GetAccessToken(client *FlickrClient, reqToken *RequestToken, oauthVerifier string) (*OAuthToken, error) {
+	client.Init()
 	client.EndpointUrl = ACCESS_TOKEN_URL
 	client.SetOAuthDefaults()
 	client.Args.Set("oauth_verifier", oauthVerifier)

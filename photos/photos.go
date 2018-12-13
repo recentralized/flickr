@@ -61,10 +61,18 @@ type PhotoInfo struct {
 	Comments int `xml:"comments"`
 	// Notes XXX: not handled yet
 	// People XXX: not handled yet
-	// Tags XXX: not handled yet
-	// Urls XXX: not handled yet
-	URLs []struct {
-		URL struct {
+	TagList struct {
+		Tag []struct {
+			ID         string `xml:"id,attr"`
+			NSID       string `xml:"author,attr"`
+			Username   string `xml:"authorname,attr"`
+			MachineTag string `xml:"machine_tag,attr"`
+			Raw        string `xml:"raw,attr"`
+			Tag        string `xml:",chardata"`
+		} `xml:"tag"`
+	} `xml:"tags"`
+	URLList struct {
+		URL []struct {
 			Type  string `xml:"type,attr"`
 			Value string `xml:",chardata"`
 		} `xml:"url"`

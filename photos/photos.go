@@ -230,3 +230,28 @@ func GetAllContexts(client *flickr.FlickrClient, id string) (*PhotoContextsRespo
 	err := flickr.DoPost(client, response)
 	return response, err
 }
+
+type PhotoPeopleGetListResponse struct {
+	flickr.BasicResponse
+	People struct {
+		Persons []struct {
+			NSID        string `xml:"nsid,attr"`
+			Username    string `xml:"username,attr"`
+			AddedByNSID string `xml:"added_by,attr"`
+		} `xml:"person"`
+	} `xml:"people"`
+}
+
+// Get all of the contexts that a photo appears in
+func PeopleGetList(client *flickr.FlickrClient, id string) (*PhotoPeopleGetListResponse, error) {
+	client.Init()
+	client.EndpointUrl = flickr.API_ENDPOINT
+	client.HTTPVerb = "POST"
+	client.Args.Set("method", "flickr.photos.people.getList")
+	client.Args.Set("photo_id", id)
+	client.OAuthSign()
+
+	response := &PhotoPeopleGetListResponse{}
+	err := flickr.DoPost(client, response)
+	return response, err
+}

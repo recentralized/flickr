@@ -300,14 +300,26 @@ type PhotosGeoGetLocationResponse struct {
 	flickr.BasicResponse
 	Photo struct {
 		Location struct {
-			Lat      float64 `xml:"latitude,attr"`
-			Long     float64 `xml:"longitude,attr"`
-			Accuracy int     `xml:"accuracy,attr"`
-			Context  int     `xml:"context,attr"`
-			PlaceID  string  `xml:"place_id,attr"`
-			WoeID    string  `xml:"woeid,attr"`
+			Lat          float64 `xml:"latitude,attr"`
+			Long         float64 `xml:"longitude,attr"`
+			Accuracy     int     `xml:"accuracy,attr"`
+			Context      int     `xml:"context,attr"`
+			PlaceID      string  `xml:"place_id,attr"`
+			WoeID        string  `xml:"woeid,attr"`
+			Neighborhood Place   `xml:"neighbourhood"`
+			Locality     Place   `xml:"locality"`
+			County       Place   `xml:"county"`
+			Region       Place   `xml:"region"`
+			Country      Place   `xml:"country"`
+			Continent    Place   `xml:"continent"`
 		} `xml:"location"`
 	} `xml:"photo"`
+}
+
+type Place struct {
+	PlaceID string `xml:"place_id,attr"`
+	WoeID   string `xml:"woeid,attr"`
+	Name    string `xml:",chardata"`
 }
 
 // Get geo location information about a photo.

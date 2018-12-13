@@ -295,3 +295,31 @@ func GetSizes(client *flickr.FlickrClient, id string) (*PhotoGetSizesResponse, e
 	err := flickr.DoPost(client, response)
 	return response, err
 }
+
+type PhotosGeoGetLocationResponse struct {
+	flickr.BasicResponse
+	Photo struct {
+		Location struct {
+			Lat      float64 `xml:"latitude,attr"`
+			Long     float64 `xml:"longitude,attr"`
+			Accuracy int     `xml:"accuracy,attr"`
+			Context  int     `xml:"context,attr"`
+			PlaceID  string  `xml:"place_id,attr"`
+			WoeID    string  `xml:"woeid,attr"`
+		} `xml:"location"`
+	} `xml:"photo"`
+}
+
+// Get geo location information about a photo.
+func GeoGetLocation(client *flickr.FlickrClient, id string) (*PhotosGeoGetLocationResponse, error) {
+	client.Init()
+	client.EndpointUrl = flickr.API_ENDPOINT
+	client.HTTPVerb = "POST"
+	client.Args.Set("method", "flickr.photos.geo.getLocation")
+	client.Args.Set("photo_id", id)
+	client.OAuthSign()
+
+	response := &PhotosGeoGetLocationResponse{}
+	err := flickr.DoPost(client, response)
+	return response, err
+}

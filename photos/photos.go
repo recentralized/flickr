@@ -265,3 +265,31 @@ func PeopleGetList(client *flickr.FlickrClient, id string) (*PhotoPeopleGetListR
 	err := flickr.DoPost(client, response)
 	return response, err
 }
+
+type PhotoGetSizesResponse struct {
+	flickr.BasicResponse
+	SizeInfo struct {
+		Sizes []struct {
+			Label  string `xml:"label,attr"`
+			Width  int    `xml:"width,attr"`
+			Height int    `xml:"height,attr"`
+			Source string `xml:"source,attr"`
+			URL    string `xml:"url,attr"`
+			Media  string `xml:"media,attr"`
+		} `xml:"size"`
+	} `xml:"sizes"`
+}
+
+// Get all of the sizes for a photo
+func GetSizes(client *flickr.FlickrClient, id string) (*PhotoGetSizesResponse, error) {
+	client.Init()
+	client.EndpointUrl = flickr.API_ENDPOINT
+	client.HTTPVerb = "POST"
+	client.Args.Set("method", "flickr.photos.getSizes")
+	client.Args.Set("photo_id", id)
+	client.OAuthSign()
+
+	response := &PhotoGetSizesResponse{}
+	err := flickr.DoPost(client, response)
+	return response, err
+}

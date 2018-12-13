@@ -59,8 +59,18 @@ type PhotoInfo struct {
 		CanShare    string `xml:"canshare,attr"`
 	} `xml:"usage"`
 	Comments int `xml:"comments"`
-	// Notes XXX: not handled yet
 	// People XXX: not handled yet
+	NoteList struct {
+		Note []struct {
+			ID       string `xml:"id,attr"`
+			NSID     string `xml:"author,attr"`
+			Username string `xml:"authorname,attr"`
+			X        int    `xml:"x,attr"`
+			Y        int    `xml:"y,attr"`
+			W        int    `xml:"w,attr"`
+			H        int    `xml:"h,attr"`
+		} `xml:"note"`
+	} `xml:"notes"`
 	TagList struct {
 		Tag []struct {
 			ID         string `xml:"id,attr"`

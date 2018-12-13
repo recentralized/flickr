@@ -164,3 +164,34 @@ func GetFavorites(client *flickr.FlickrClient, id string, opts GetFavoritesOptio
 	err := flickr.DoPost(client, response)
 	return response, err
 }
+
+type CommentsList struct {
+	PhotoID  string `json:"photo_id,attr"`
+	Comments []struct {
+		ID        string `xml:"id,attr"`
+		NSID      string `xml:"author,attr"`
+		Username  string `xml:"authorname,attr"`
+		Date      string `xml:"datecreate,attr"`
+		Permalink string `xml:"permalink,attr"`
+		Text      string `xml:",chardata"`
+	} `xml:"comment"`
+}
+
+type PhotoCommentsResponse struct {
+	flickr.BasicResponse
+	Comments CommentsList `xml:"comments"`
+}
+
+// Get comments for a photo
+func GetComments(client *flickr.FlickrClient, id string) (*PhotoCommentsResponse, error) {
+	client.Init()
+	client.EndpointUrl = flickr.API_ENDPOINT
+	client.HTTPVerb = "POST"
+	client.Args.Set("method", "flickr.photos.getComments")
+	client.Args.Set("photo_id", id)
+	client.OAuthSign()
+
+	response := &PhotoCommentsResponse{}
+	err := flickr.DoPost(client, response)
+	return response, err
+}

@@ -203,3 +203,30 @@ func GetComments(client *flickr.FlickrClient, id string) (*PhotoCommentsResponse
 	err := flickr.DoPost(client, response)
 	return response, err
 }
+
+type PhotoContextsResponse struct {
+	flickr.BasicResponse
+	Sets []struct {
+		ID    string `xml:"id,attr"`
+		Title string `xml:"title,attr"`
+	} `xml:"set"`
+	Pools []struct {
+		ID    string `xml:"id,attr"`
+		Title string `xml:"title,attr"`
+		URL   string `xml:"url,attr"`
+	} `xml:"pool"`
+}
+
+// Get all of the contexts that a photo appears in
+func GetAllContexts(client *flickr.FlickrClient, id string) (*PhotoContextsResponse, error) {
+	client.Init()
+	client.EndpointUrl = flickr.API_ENDPOINT
+	client.HTTPVerb = "POST"
+	client.Args.Set("method", "flickr.photos.getAllContexts")
+	client.Args.Set("photo_id", id)
+	client.OAuthSign()
+
+	response := &PhotoContextsResponse{}
+	err := flickr.DoPost(client, response)
+	return response, err
+}

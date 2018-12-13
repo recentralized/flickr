@@ -59,9 +59,11 @@ type PhotoInfo struct {
 		CanShare    string `xml:"canshare,attr"`
 	} `xml:"usage"`
 	Comments int `xml:"comments"`
-	// People XXX: not handled yet
+	People   struct {
+		HasPeople bool `xml:"haspeople,attr"`
+	} `xml:"people"`
 	NoteList struct {
-		Note []struct {
+		Notes []struct {
 			ID       string `xml:"id,attr"`
 			NSID     string `xml:"author,attr"`
 			Username string `xml:"authorname,attr"`
@@ -72,7 +74,7 @@ type PhotoInfo struct {
 		} `xml:"note"`
 	} `xml:"notes"`
 	TagList struct {
-		Tag []struct {
+		Tags []struct {
 			ID         string `xml:"id,attr"`
 			NSID       string `xml:"author,attr"`
 			Username   string `xml:"authorname,attr"`
@@ -82,7 +84,7 @@ type PhotoInfo struct {
 		} `xml:"tag"`
 	} `xml:"tags"`
 	URLList struct {
-		URL []struct {
+		URLs []struct {
 			Type  string `xml:"type,attr"`
 			Value string `xml:",chardata"`
 		} `xml:"url"`

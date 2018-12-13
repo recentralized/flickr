@@ -128,3 +128,39 @@ func SetDates(client *flickr.FlickrClient, id string, datePosted string, dateTak
 	err := flickr.DoPost(client, response)
 	return response, err
 }
+
+type FavoritesList struct {
+	Page      int `xml:"page,attr"`
+	Pages     int `xml:"pages,attr"`
+	PerPage   int `xml:"perpage,attr"`
+	Total     int `xml:"total,attr"`
+	Favorites []struct {
+		NSID     string `xml:"nsid,attr"`
+		Username string `xml:"username,attr"`
+		Date     string `xml:"favedate,attr"`
+	} `xml:"person"`
+}
+
+type PhotoFavoritesResponse struct {
+	flickr.BasicResponse
+	Photo FavoritesList `xml:"photo"`
+}
+
+type GetFavoritesOptionalArgs struct {
+	PerPage int // 0 to ignore
+	Page    int // 0 to ignore
+}
+
+// Get favorites for a photo
+func GetFavorites(client *flickr.FlickrClient, id string, opts GetFavoritesOptionalArgs) (*PhotoFavoritesResponse, error) {
+	client.Init()
+	client.EndpointUrl = flickr.API_ENDPOINT
+	client.HTTPVerb = "POST"
+	client.Args.Set("method", "flickr.photos.getFavorites")
+	client.Args.Set("photo_id", id)
+	client.OAuthSign()
+
+	response := &PhotoFavoritesResponse{}
+	err := flickr.DoPost(client, response)
+	return response, err
+}

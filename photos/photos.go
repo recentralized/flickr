@@ -197,21 +197,21 @@ type CommentsList struct {
 	} `xml:"comment"`
 }
 
-type PhotoCommentsResponse struct {
+type CommentsGetListResponse struct {
 	flickr.BasicResponse
 	Comments CommentsList `xml:"comments"`
 }
 
 // Get comments for a photo
-func GetComments(client *flickr.FlickrClient, id string) (*PhotoCommentsResponse, error) {
+func CommentsGetList(client *flickr.FlickrClient, id string) (*CommentsGetListResponse, error) {
 	client.Init()
 	client.EndpointUrl = flickr.API_ENDPOINT
 	client.HTTPVerb = "POST"
-	client.Args.Set("method", "flickr.photos.getComments")
+	client.Args.Set("method", "flickr.photos.comments.getList")
 	client.Args.Set("photo_id", id)
 	client.OAuthSign()
 
-	response := &PhotoCommentsResponse{}
+	response := &CommentsGetListResponse{}
 	err := flickr.DoPost(client, response)
 	return response, err
 }

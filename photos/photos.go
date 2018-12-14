@@ -67,6 +67,7 @@ type PhotoInfo struct {
 			ID       string `xml:"id,attr"`
 			NSID     string `xml:"author,attr"`
 			Username string `xml:"authorname,attr"`
+			Text     string `xml:",chardata"`
 			X        int    `xml:"x,attr"`
 			Y        int    `xml:"y,attr"`
 			W        int    `xml:"w,attr"`

@@ -162,6 +162,35 @@ func SetAllExtrasForGetPhotos(a *GetPhotosOptionalArgs) {
 	a.Extras = "description,license,date_upload,date_taken,owner_name,icon_server,original_format,last_update,geo,tags,machine_tags,o_dims,views,media,path_alias,url_sq,url_t,url_s,url_q,url_m,url_n,url_z,url_c,url_l,url_o"
 }
 
+type GetInfoResponse struct {
+	flickr.BasicResponse
+	Person struct {
+		NSID       string `xml:"nsid,attr"`
+		Username   string `xml:"username"`
+		RealName   string `xml:"realname"`
+		PhotosUrl  string `xml:"photosurl"`
+		ProfileUrl string `xml:"profileurl"`
+		Photos     struct {
+			FirstDate int `xml:"firstdate"`
+			Count     int `xml:"count"`
+			Views     int `xml:"views"`
+		} `xml:"photos"`
+	} `xml:"person"`
+}
+
+func GetInfo(client *flickr.FlickrClient, userId string) (*GetInfoResponse, error) {
+	client.Init()
+	client.EndpointUrl = flickr.API_ENDPOINT
+	client.HTTPVerb = "POST"
+	client.Args.Set("method", "flickr.people.getInfo")
+	client.Args.Set("user_id", userId)
+	client.OAuthSign()
+
+	response := &GetInfoResponse{}
+	err := flickr.DoGet(client, response)
+	return response, err
+}
+
 func GetPhotos(client *flickr.FlickrClient,
 	userId string, opts GetPhotosOptionalArgs) (*PhotoListResponse, error) {
 	client.Init()

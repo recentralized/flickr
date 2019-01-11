@@ -1,6 +1,8 @@
 package photos
 
 import (
+	"strconv"
+
 	"gopkg.in/masci/flickr.v2"
 )
 
@@ -179,6 +181,12 @@ func GetFavorites(client *flickr.FlickrClient, id string, opts GetFavoritesOptio
 	client.HTTPVerb = "POST"
 	client.Args.Set("method", "flickr.photos.getFavorites")
 	client.Args.Set("photo_id", id)
+	if opts.PerPage != 0 {
+		client.Args.Set("per_page", strconv.Itoa(opts.PerPage))
+	}
+	if opts.Page != 0 {
+		client.Args.Set("page", strconv.Itoa(opts.Page))
+	}
 	client.OAuthSign()
 
 	response := &PhotoFavoritesResponse{}

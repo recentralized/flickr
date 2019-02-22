@@ -228,8 +228,10 @@ func CommentsGetList(client *flickr.FlickrClient, id string) (*CommentsGetListRe
 type PhotoContextsResponse struct {
 	flickr.BasicResponse
 	Sets []struct {
-		ID    string `xml:"id,attr"`
-		Title string `xml:"title,attr"`
+		ID         string `xml:"id,attr"`
+		Title      string `xml:"title,attr"`
+		PhotoCount int    `xml:"count_photo,attr"`
+		VideoCount int    `xml:"count_video,attr"`
 	} `xml:"set"`
 	Pools []struct {
 		ID    string `xml:"id,attr"`
